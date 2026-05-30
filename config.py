@@ -99,11 +99,6 @@ _REQUIRED_ENV_VARS = [
     "API_BASE_URL",
     "API_KEY",
     "MODEL_NAME",
-    "SMTP_SERVER",
-    "SMTP_PORT",
-    "SMTP_SENDER",
-    "SMTP_AUTH_CODE",
-    "SMTP_RECEIVER",
 ]
 
 

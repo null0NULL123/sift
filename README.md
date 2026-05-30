@@ -104,16 +104,25 @@ channels=[FileChannel(), EmailChannel(), WechatChannel()]
 
 Fork 项目后，在仓库 Settings → Secrets and variables → Actions 中添加以下 Secrets：
 
+**必填：**
+
 | Secret | 说明 | 示例 |
 |---|---|---|
 | `API_BASE_URL` | LLM API 地址 | `https://api.deepseek.com/v1` |
 | `API_KEY` | API 密钥 | `sk-xxx` |
 | `MODEL_NAME` | 模型名 | `deepseek-chat` |
-| `SMTP_SERVER` | SMTP 服务器 | `smtp.qq.com` |
-| `SMTP_PORT` | SMTP 端口 | `587` |
-| `SMTP_SENDER` | 发件邮箱 | `xxx@qq.com` |
-| `SMTP_AUTH_CODE` | 邮箱授权码 | 见下方说明 |
-| `SMTP_RECEIVER` | 收件邮箱 | `xxx@qq.com` |
+
+**可选（邮件推送）：**
+
+| Secret | 说明 |
+|---|---|
+| `SMTP_SERVER` | SMTP 服务器，如 `smtp.qq.com` |
+| `SMTP_PORT` | SMTP 端口，如 `587` |
+| `SMTP_SENDER` | 发件邮箱 |
+| `SMTP_AUTH_CODE` | 邮箱授权码 |
+| `SMTP_RECEIVER` | 收件邮箱 |
+
+不配置 SMTP 也能用——周报会保存为文件和 GitHub Pages 页面。
 
 配置完成后，每周一北京时间 17:00 自动运行。也可在 Actions 页面手动触发。
 

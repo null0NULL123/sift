@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import argparse
 import logging
+import os
 import sys
 
 from config import (
@@ -38,7 +39,6 @@ def cmd_run(args: argparse.Namespace) -> None:
     """Run the full pipeline: fetch -> dedup -> save -> summarize -> deliver."""
     load_env()
 
-    from channels.email import EmailChannel
     from channels.file import FileChannel
     from channels.github_pages import GitHubPagesChannel
     from processors.summarizer import SummarizeProcessor
@@ -49,10 +49,18 @@ def cmd_run(args: argparse.Namespace) -> None:
         log.error(f"No sources found in {args.feeds}")
         sys.exit(1)
 
+    # Email is optional — only add if SMTP is configured
+    channels: list = [FileChannel(), GitHubPagesChannel()]
+    if os.environ.get("SMTP_SENDER") and os.environ.get("SMTP_AUTH_CODE"):
+        from channels.email import EmailChannel
+        channels.append(EmailChannel())
+    else:
+        log.info("SMTP not configured, skipping email delivery")
+
     Pipeline(
         sources=sources,
         storage=KnowledgeStorage(),
-        channels=[FileChannel(), EmailChannel(), GitHubPagesChannel()],
+        channels=channels,
         summarize_processor=SummarizeProcessor(prompt_name=args.profile),
         days=args.days or get_summary_days(),
         language=args.language or get_summary_language(),

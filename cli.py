@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import argparse
 import logging
+import os
 import sys
 
 from config import load_env, load_sources, get_summary_days, get_summary_language
@@ -62,11 +63,13 @@ def cmd_run(args: argparse.Namespace) -> None:
     days = args.days or get_summary_days()
     language = args.language or get_summary_language()
 
+    prompt_name = args.profile or os.environ.get("PROMPT_NAME", "tech-weekly")
+
     pipeline = Pipeline(
         sources=sources,
         storage=KnowledgeStorage(),
         channels=[FileChannel(), EmailChannel(), GitHubPagesChannel()],
-        summarize_processor=SummarizeProcessor(),
+        summarize_processor=SummarizeProcessor(prompt_name=prompt_name),
         days=days,
         language=language,
     )
@@ -153,6 +156,7 @@ def _build_parser() -> argparse.ArgumentParser:
     p_run = sub.add_parser("run", help="Full pipeline: fetch + summarize + deliver")
     p_run.add_argument("--days", type=int, default=None, help="Days of articles to fetch (default: from env)")
     p_run.add_argument("--language", default=None, help="Target language for digest (default: from env)")
+    p_run.add_argument("--profile", default=None, help="Prompt profile name (default: tech-weekly)")
 
     # -- fetch --
     p_fetch = sub.add_parser("fetch", help="Fetch and store articles only")

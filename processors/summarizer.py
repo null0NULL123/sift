@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import os
 import re
+from pathlib import Path
 
 from openai import OpenAI
 
@@ -11,27 +12,43 @@ from models import Digest, FeedResult
 
 from .base import BaseProcessor
 
-SYSTEM_PROMPT = """你是一位资深技术编辑，专注于将英文技术博客文章转化为高质量的中文技术周报。
+# Default prompt (fallback if no prompt file is found)
+DEFAULT_PROMPT = """你是一位资深技术编辑，专注于将英文技术博客文章转化为高质量的中文技术周报。
 
 ## 输出要求
 1. **开头写"本周看点"**：用 ## 标题，2-3 条核心洞察，概括本周最重要的趋势和关联
-2. **按主题分组**，每组用 ## 标题（如"## AI 商业化"、"## 开发者工具"、"## 安全与治理"）
+2. **按主题分组**，每组用 ## 标题
 3. 每篇文章格式：**加粗标题** [来源名]，然后 2-3 句正文概括
-4. 来源标注用方括号，如 [GitHub Blog]、[Simon Willison]、[Meta Engineering]
-5. 保留关键术语的英文原文（如 API、Kubernetes、LLM 等）
-6. 突出"为什么这个重要"——技术意义或行业影响
+4. 来源标注用方括号
+5. 保留关键术语的英文原文
+6. 突出"为什么这个重要"
 7. 每篇附上原文链接，格式为 [原文链接](URL)
 8. 不要用翻译腔，用自然流畅的中文表达
-9. 主题分类不要超过 5 个，根据实际内容灵活归类
+9. 主题分类不要超过 5 个
 
 ## 输出格式（严格遵守）
 - 标题: # 一级标题, ## 二级标题
 - 文章格式: **标题** [来源] + 正文 + [原文链接](URL)
-- 加粗: **文字**
-- 链接: [原文链接](https://...)  —— 必须用标准 markdown 链接格式
 - 每篇文章之间用空行分隔
-- 不要输出任何 HTML 标签
 """
+
+# Prompts directory (relative to project root)
+PROMPTS_DIR = Path(__file__).parent.parent / "prompts"
+
+
+def load_prompt(name: str = "tech-weekly") -> str:
+    """Load a prompt from the prompts directory.
+
+    Args:
+        name: Prompt filename without extension (e.g., "tech-weekly", "finance-weekly")
+
+    Returns:
+        The prompt text, or DEFAULT_PROMPT if file not found.
+    """
+    filepath = PROMPTS_DIR / f"{name}.md"
+    if filepath.exists():
+        return filepath.read_text(encoding="utf-8").strip()
+    return DEFAULT_PROMPT
 
 
 class SummarizeProcessor(BaseProcessor):
@@ -42,10 +59,21 @@ class SummarizeProcessor(BaseProcessor):
         api_key: str | None = None,
         api_base_url: str | None = None,
         model: str | None = None,
+        prompt: str | None = None,
+        prompt_name: str | None = None,
     ) -> None:
         self._api_key = api_key or os.environ["API_KEY"]
         self._api_base_url = api_base_url or os.environ["API_BASE_URL"]
         self._model = model or os.environ.get("MODEL_NAME", "deepseek-chat")
+
+        # Prompt loading priority: explicit prompt > prompt_name file > env > default
+        if prompt:
+            self._system_prompt = prompt
+        elif prompt_name:
+            self._system_prompt = load_prompt(prompt_name)
+        else:
+            env_prompt = os.environ.get("PROMPT_NAME", "tech-weekly")
+            self._system_prompt = load_prompt(env_prompt)
 
     def process(
         self,
@@ -67,7 +95,7 @@ class SummarizeProcessor(BaseProcessor):
         response = client.chat.completions.create(
             model=self._model,
             messages=[
-                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "system", "content": self._system_prompt},
                 {"role": "user", "content": user_prompt},
             ],
             temperature=0.3,

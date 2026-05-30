@@ -111,7 +111,7 @@ bash setup.sh
 # 4. 编辑 .env 填入密钥和邮箱
 vi .env
 # 5. 手动测试
-.venv/bin/python3 main.py
+.venv/bin/python3 cli.py
 # 6. 启动定时任务
 crond
 ```
@@ -122,7 +122,7 @@ crond
 pip install -r requirements.txt
 cp .env.example .env
 vi .env
-python3 main.py
+python3 cli.py
 ```
 
 ## 配置
@@ -170,17 +170,17 @@ python3 main.py
 实现方式：通过 `--profile` 参数指定不同的配置目录，每个目录有独立的 `feeds.json` 和 `prompt.txt`：
 
 ```bash
-python3 main.py --profile tech       # 技术周报
-python3 main.py --profile finance    # 投研周报
-python3 main.py --profile papers     # 论文周报
+python3 cli.py --profile tech       # 技术周报
+python3 cli.py --profile finance    # 投研周报
+python3 cli.py --profile papers     # 论文周报
 ```
 
 也可以设不同的发送时间：
 
 ```
-0 8 * * 1   python3 main.py --profile tech       # 周一 8:00 技术
-0 9 * * 1   python3 main.py --profile finance     # 周一 9:00 投研
-0 8 * * 5   python3 main.py --profile papers      # 周五 8:00 论文
+0 8 * * 1   python3 cli.py --profile tech       # 周一 8:00 技术
+0 9 * * 1   python3 cli.py --profile finance     # 周一 9:00 投研
+0 8 * * 5   python3 cli.py --profile papers      # 周五 8:00 论文
 ```
 
 ## 输出示例

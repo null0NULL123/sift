@@ -37,7 +37,7 @@ jobs:
           SMTP_RECEIVER: ${{ secrets.SMTP_RECEIVER }}
           SUMMARY_DAYS: '7'
           SUMMARY_LANGUAGE: 'zh-CN'
-        run: python3 main.py run
+        run: python3 cli.py run
 
       - name: Commit and push docs
         run: |

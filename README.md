@@ -18,13 +18,14 @@
 ## 架构
 
 ```
-Sources → Pipeline → Channels
-            ▲
-            │
-     Feedback Engine (👍/👎 → 偏好自动学习)
+Sources ──▶ Pipeline ◀──▶ KnowledgeStorage ◀──▶ Channels
+                                ▲
+                                │
+                                ▼
+                             Web UI
 ```
 
-三层管道 + 反馈闭环：数据源、处理、投递各层解耦，用户反馈自动驱动偏好演进。
+所有组件围绕 KnowledgeStorage（signal.db）交互，Pipeline 负责抓取、去重、摘要、投递。
 
 → [完整架构设计](docs/architecture.md)
 

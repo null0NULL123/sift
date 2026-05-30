@@ -5,40 +5,14 @@
 Signal 采用三层管道架构，数据源、处理逻辑、投递渠道完全解耦，用户反馈自动驱动偏好演进：
 
 ```
-                          ┌──────────────────────────────────────┐
-                          │           Web UI (Streamlit)         │
-                          │                                      │
-                          │  Dashboard    Articles    Sidebar    │
-                          │  (趋势/统计)  (浏览/搜索)  (语言/工作区)│
-                          │                  │                    │
-                          │              👍 / 👎                  │
-                          │              (文章级反馈)              │
-                          └──────────┬───────────────────────────┘
-                                     │
-                                     ▼
-┌─────────────┐    ┌──────────────────────────────┐    ┌─────────────┐
-│   Sources    │───▶│          Pipeline             │───▶│  Channels   │
-│  (数据源层)  │    │                              │    │  (投递层)    │
-└─────────────┘    │  Dedup → Store → Summarize    │    └─────────────┘
-  RSS Source       │              ▲                 │      Email
-  Web Source       │              │                 │      File
-  (+ 未来: API,    │     ┌────────┴────────┐        │      GitHub Pages
-   Telegram...)    │     │ Feedback Engine │        │      (+ 未来: 微信,
-                   │     │  (偏好自动推断)  │        │       Telegram...)
-                   │     └────────┬────────┘        │
-                   │              │                 │
-                   │     ┌────────┴────────┐        │
-                   │     │ Knowledge Base  │        │
-                   │     │  signal.db      │        │
-                   │     │                 │        │
-                   │     │ articles        │        │
-                   │     │ feedback        │        │
-                   │     │ topics          │        │
-                   │     │ digests         │        │
-                   │     │ article_vec     │        │
-                   │     └─────────────────┘        │
-                   └──────────────────────────────┘
+Sources ──▶ Pipeline ◀──▶ KnowledgeStorage ◀──▶ Channels
+                                ▲
+                                │
+                                ▼
+                             Web UI
 ```
+
+所有组件围绕 KnowledgeStorage（signal.db）交互，Pipeline 负责抓取、去重、摘要、投递。
 
 ## 数据源层（Sources）
 

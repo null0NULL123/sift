@@ -50,7 +50,7 @@ class KnowledgeStorage(BaseStorage):
             return self._conn
         db_path = get_env("DB_PATH", DEFAULT_DB_PATH)
         Path(db_path).parent.mkdir(parents=True, exist_ok=True)
-        db = sqlite3.connect(db_path)
+        db = sqlite3.connect(db_path, check_same_thread=False)
         db.execute("PRAGMA journal_mode=WAL")
         db.execute("PRAGMA synchronous=NORMAL")
         db.execute("PRAGMA cache_size=-8000")
@@ -95,6 +95,11 @@ class KnowledgeStorage(BaseStorage):
                 content TEXT NOT NULL,
                 article_count INTEGER DEFAULT 0,
                 created_at TEXT DEFAULT (datetime('now'))
+            );
+            CREATE TABLE IF NOT EXISTS preferences (
+                key TEXT PRIMARY KEY,
+                value TEXT NOT NULL,
+                updated_at TEXT DEFAULT (datetime('now'))
             );
             CREATE INDEX IF NOT EXISTS idx_articles_week ON articles(week);
             CREATE INDEX IF NOT EXISTS idx_articles_source ON articles(source);
@@ -414,3 +419,59 @@ class KnowledgeStorage(BaseStorage):
                 line += f"\n  {re.sub(r'<[^>]+>', '', r.summary)[:CONTEXT_SUMMARY_TRUNCATE_LENGTH]}"
             lines.append(line)
         return "\n".join(lines)
+
+    # ------------------------------------------------------------------
+    # Preferences (key-value store in SQLite)
+    # ------------------------------------------------------------------
+
+    def get_preference(self, key: str, default: str = "") -> str:
+        db = self._get_db()
+        row = db.execute("SELECT value FROM preferences WHERE key = ?", (key,)).fetchone()
+        return row[0] if row else default
+
+    def set_preference(self, key: str, value: str) -> None:
+        db = self._get_db()
+        db.execute(
+            "INSERT INTO preferences (key, value, updated_at) VALUES (?, ?, datetime('now')) ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = excluded.updated_at",
+            (key, value),
+        )
+        db.commit()
+
+    def get_all_preferences(self) -> dict[str, str]:
+        db = self._get_db()
+        rows = db.execute("SELECT key, value FROM preferences").fetchall()
+        return {r[0]: r[1] for r in rows}
+
+    # ------------------------------------------------------------------
+    # Dashboard queries
+    # ------------------------------------------------------------------
+
+    def get_digests(self, limit: int = 10) -> list[dict]:
+        db = self._get_db()
+        rows = db.execute(
+            "SELECT week, content, article_count, created_at FROM digests ORDER BY week DESC LIMIT ?",
+            (limit,),
+        ).fetchall()
+        return [{"week": r[0], "content": r[1], "article_count": r[2], "created_at": r[3]} for r in rows]
+
+    def get_stats(self) -> dict:
+        db = self._get_db()
+        article_count = db.execute("SELECT COUNT(*) FROM articles").fetchone()[0]
+        source_count = db.execute("SELECT COUNT(DISTINCT source) FROM articles").fetchone()[0]
+        digest_count = db.execute("SELECT COUNT(*) FROM digests").fetchone()[0]
+        week_count = db.execute("SELECT COUNT(DISTINCT week) FROM articles").fetchone()[0]
+        return {
+            "articles": article_count,
+            "sources": source_count,
+            "digests": digest_count,
+            "weeks": week_count,
+        }
+
+    def get_source_distribution(self, weeks: int = 12) -> list[dict]:
+        db = self._get_db()
+        cutoff = self._week_id(datetime.now(timezone.utc) - timedelta(weeks=weeks))
+        rows = db.execute(
+            "SELECT source, COUNT(*) as cnt FROM articles WHERE week >= ? GROUP BY source ORDER BY cnt DESC",
+            (cutoff,),
+        ).fetchall()
+        return [{"source": r[0], "count": r[1]} for r in rows]

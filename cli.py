@@ -22,7 +22,12 @@ from config import (
     get_summary_days,
     get_summary_language,
 )
+from channels.file import FileChannel
+from channels.github_pages import GitHubPagesChannel
 from pipeline import Pipeline, create_source
+from sources.base import BaseSource
+from processors.summarizer import SummarizeProcessor
+from storage.knowledge import KnowledgeStorage
 
 log = logging.getLogger("signal")
 
@@ -39,11 +44,6 @@ def cmd_run(args: argparse.Namespace) -> None:
     """Run the full pipeline: fetch -> dedup -> save -> summarize -> deliver."""
     load_env()
     validate_env(include_smtp=args.email)
-
-    from channels.file import FileChannel
-    from channels.github_pages import GitHubPagesChannel
-    from processors.summarizer import SummarizeProcessor
-    from storage.knowledge import KnowledgeStorage
 
     sources = load_sources(args.feeds)
     if not sources:
@@ -70,8 +70,6 @@ def cmd_fetch(args: argparse.Namespace) -> None:
     """Fetch and store articles only (no summarization, no delivery)."""
     load_env()
 
-    from storage.knowledge import KnowledgeStorage
-
     sources = load_sources(args.feeds)
     if not sources:
         log.error(f"No sources found in {args.feeds}")
@@ -92,8 +90,6 @@ def cmd_fetch(args: argparse.Namespace) -> None:
 
 def cmd_discover(args: argparse.Namespace) -> None:
     """Discover available sub-sources from configured feeds."""
-    from sources.base import BaseSource
-
     sources = load_sources(args.feeds)
     if not sources:
         log.error(f"No sources found in {args.feeds}")

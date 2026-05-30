@@ -31,6 +31,10 @@ jobs:
           SMTP_SENDER: ${{ secrets.SMTP_SENDER }}
           SMTP_AUTH_CODE: ${{ secrets.SMTP_AUTH_CODE }}
           SMTP_RECEIVER: ${{ secrets.SMTP_RECEIVER }}
+          # Embedding (optional, enables semantic search)
+          EMBEDDING_API_BASE_URL: ${{ secrets.EMBEDDING_API_BASE_URL }}
+          EMBEDDING_API_KEY: ${{ secrets.EMBEDDING_API_KEY }}
+          EMBEDDING_MODEL: ${{ secrets.EMBEDDING_MODEL }}
           SUMMARY_DAYS: '7'
           SUMMARY_LANGUAGE: 'zh-CN'
         run: python3 cli.py run  # add --email to enable email delivery

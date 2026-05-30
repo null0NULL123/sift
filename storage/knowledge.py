@@ -41,14 +41,15 @@ from .base import BaseStorage
 class KnowledgeStorage(BaseStorage):
     """SQLite + sqlite-vec storage backend for the knowledge base."""
 
-    def __init__(self) -> None:
+    def __init__(self, db_path: str | None = None) -> None:
         self._conn: sqlite3.Connection | None = None
+        self._db_path = db_path
 
     def _get_db(self) -> sqlite3.Connection:
         """Get database connection with sqlite-vec loaded. Reuses connection within a run."""
         if self._conn is not None:
             return self._conn
-        db_path = get_env("DB_PATH", DEFAULT_DB_PATH)
+        db_path = self._db_path or get_env("DB_PATH", DEFAULT_DB_PATH)
         Path(db_path).parent.mkdir(parents=True, exist_ok=True)
         db = sqlite3.connect(db_path, check_same_thread=False)
         db.execute("PRAGMA journal_mode=WAL")

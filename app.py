@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import subprocess
 import sys
 from pathlib import Path
 
@@ -19,6 +20,17 @@ st.set_page_config(
     page_icon=":material/filter_list:",
     layout="wide",
 )
+
+# Compact sidebar spacing
+st.markdown("""
+<style>
+    section[data-testid="stSidebar"] .stTextInput {margin-bottom: 0.2rem;}
+    section[data-testid="stSidebar"] .stButton {margin-top: 0rem; margin-bottom: 0.5rem;}
+    section[data-testid="stSidebar"] .stSelectbox {margin-bottom: 0.2rem;}
+    section[data-testid="stSidebar"] hr {margin: 0.4rem 0;}
+    section[data-testid="stSidebar"] [data-testid="stExpander"] {margin-bottom: 0.3rem;}
+</style>
+""", unsafe_allow_html=True)
 
 
 def init_session():
@@ -39,24 +51,66 @@ def get_storage(workspace: str):
 def render_workspace_selector():
     """Render workspace selector in sidebar."""
     workspaces = ws.list_workspaces()
+    current = st.session_state.workspace
     with st.sidebar:
         st.header("工作区")
-        current_idx = workspaces.index(st.session_state.workspace) if st.session_state.workspace in workspaces else 0
+        current_idx = workspaces.index(current) if current in workspaces else 0
         selected = st.selectbox("选择工作区", workspaces, index=current_idx, label_visibility="collapsed")
-        if selected != st.session_state.workspace:
+        if selected != current:
             st.session_state.workspace = selected
             st.rerun()
 
-        # Quick create
-        with st.expander("新建工作区"):
-            new_name = st.text_input("名称", key="new_ws_name", placeholder="如 finance、ai-papers")
-            if st.button("创建", use_container_width=True) and new_name:
+        st.divider()
+
+        # New workspace
+        new_name = st.text_input("新建工作区", key="new_ws_name", placeholder="输入名称")
+        if new_name:
+            if st.button("创建", use_container_width=True):
                 try:
                     ws.create_workspace(new_name)
-                    st.success(f"已创建 {new_name}")
                     st.session_state.workspace = new_name
                     st.rerun()
                 except ValueError as e:
+                    st.error(str(e))
+
+        # Rename / Delete (not for default)
+        if current != ws.DEFAULT_WORKSPACE:
+            st.divider()
+            new_rename = st.text_input("重命名当前工作区", key="rename_ws_name", placeholder=current)
+            if new_rename:
+                if st.button("重命名", use_container_width=True):
+                    try:
+                        ws.rename_workspace(current, new_rename)
+                        st.session_state.workspace = new_rename
+                        st.rerun()
+                    except ValueError as e:
+                        st.error(str(e))
+
+            if st.button("删除当前工作区", type="secondary", use_container_width=True):
+                try:
+                    ws.delete_workspace(current)
+                    st.session_state.workspace = ws.DEFAULT_WORKSPACE
+                    st.rerun()
+                except ValueError as e:
+                    st.error(str(e))
+
+        st.divider()
+
+        # Manual update
+        if st.button("立即更新", use_container_width=True):
+            with st.spinner("正在抓取并生成摘要..."):
+                try:
+                    result = subprocess.run(
+                        [sys.executable, "cli.py", "run", "--workspace", current],
+                        capture_output=True, text=True, timeout=300,
+                    )
+                    if result.returncode == 0:
+                        st.success("更新完成")
+                    else:
+                        st.error(result.stderr[-200:] if result.stderr else "更新失败")
+                except subprocess.TimeoutExpired:
+                    st.error("超时（5 分钟）")
+                except Exception as e:
                     st.error(str(e))
 
         st.divider()

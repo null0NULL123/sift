@@ -48,8 +48,8 @@ def get_db_path(workspace: str = DEFAULT_WORKSPACE) -> str:
     """Get database path for a workspace."""
     ws_path = get_workspace_path(workspace)
     if workspace == DEFAULT_WORKSPACE:
-        return str(ws_path / "knowledge" / "signal.db")
-    return str(ws_path / "signal.db")
+        return str(ws_path / "knowledge" / "knowledge.db")
+    return str(ws_path / "knowledge.db")
 
 
 def workspace_exists(name: str) -> bool:
@@ -101,6 +101,26 @@ def delete_workspace(name: str) -> None:
 
     ws_path = get_workspace_path(name)
     shutil.rmtree(ws_path)
+
+
+def rename_workspace(old_name: str, new_name: str) -> None:
+    """Rename a workspace.
+
+    Raises:
+        ValueError: If names are invalid, old doesn't exist, or new already exists.
+    """
+    if old_name == DEFAULT_WORKSPACE:
+        raise ValueError("Cannot rename the default workspace")
+    if not workspace_exists(old_name):
+        raise ValueError(f"Workspace '{old_name}' does not exist")
+    if workspace_exists(new_name):
+        raise ValueError(f"Workspace '{new_name}' already exists")
+    if not new_name or not new_name.replace("-", "").replace("_", "").isalnum():
+        raise ValueError(f"Invalid workspace name: {new_name}")
+
+    old_path = get_workspace_path(old_name)
+    new_path = get_workspace_path(new_name)
+    old_path.rename(new_path)
 
 
 def get_active_workspace() -> str:

@@ -2,7 +2,7 @@
 
 ## Three-Layer Pipeline + Feedback Loop
 
-Signal adopts a three-layer pipeline architecture where data sources, processing logic, and delivery channels are fully decoupled, with user feedback automatically driving preference evolution:
+Sift adopts a three-layer pipeline architecture where data sources, processing logic, and delivery channels are fully decoupled, with user feedback automatically driving preference evolution:
 
 ```
 Sources ──▶ Pipeline ◀──▶ KnowledgeStorage ◀──▶ Channels
@@ -12,7 +12,7 @@ Sources ──▶ Pipeline ◀──▶ KnowledgeStorage ◀──▶ Channels
                              Web UI
 ```
 
-All components interact around KnowledgeStorage (signal.db), Pipeline handles fetching, deduplication, summarization, and delivery.
+All components interact around KnowledgeStorage (knowledge.db), Pipeline handles fetching, deduplication, summarization, and delivery.
 
 ## Data Source Layer (Sources)
 
@@ -73,7 +73,7 @@ Data source fetching (parallel) → Filter recent N days → Store in knowledge 
 
 ## Feedback-Driven Preference System
 
-Signal doesn't require manual selection of "focus areas"—the system automatically learns preferences from your behavior.
+Sift doesn't require manual selection of "focus areas"—the system automatically learns preferences from your behavior.
 
 ### How It Works
 
@@ -93,7 +93,7 @@ User browses article → Clicks 👍/👎 → Feedback written to DB
                               └── Downweighted content appears less frequently
 ```
 
-### Feedback Signals
+### Feedback Sifts
 
 | Interaction | What's Learned |
 |---|---|
@@ -112,7 +112,7 @@ User browses article → Clicks 👍/👎 → Feedback written to DB
 
 ## Knowledge Accumulation
 
-Each time a report is generated, the system automatically stores articles in a local SQLite database (`knowledge/signal.db`), gradually building your technical knowledge base:
+Each time a report is generated, the system automatically stores articles in a local SQLite database (`knowledge/knowledge.db`), gradually building your technical knowledge base:
 
 - **Article storage**: All fetched articles are automatically stored, deduplicated by hash, no duplicate storage
 - **Feedback accumulation**: User's 👍/👎 on articles persistently stored, forming preference profile
@@ -122,7 +122,7 @@ Each time a report is generated, the system automatically stores articles in a l
 - **Preference injection**: When generating reports, Feedback Engine's aggregated topic/source weights are automatically injected into prompt, making summaries align with user interests
 
 **Why use SQLite + sqlite-vec?**
-- Single file storage (`knowledge/signal.db`), zero operations, can run directly on phone
+- Single file storage (`knowledge/knowledge.db`), zero operations, can run directly on phone
 - Structured queries (filter by time, source) and vector search (semantic similarity) share the same database
 - sqlite-vec is an official SQLite extension, pure C implementation, no external dependencies
 
@@ -132,7 +132,7 @@ Each time a report is generated, the system automatically stores articles in a l
 
 ### Database Schema Changes
 
-Add `feedback` table in `signal.db`:
+Add `feedback` table in `knowledge.db`:
 
 ```sql
 CREATE TABLE IF NOT EXISTS feedback (

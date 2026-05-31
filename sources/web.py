@@ -14,7 +14,7 @@ from config import HTTP_USER_AGENT, WEB_SUMMARY_TRUNCATE_LENGTH, get_int
 from models import FeedResult, Entry, SourceConfig
 from .base import BaseSource
 
-log = logging.getLogger("signal")
+log = logging.getLogger("sift")
 
 _DEFAULTS = {"selector": "article", "title_sel": "h2", "summary_sel": "p", "link_sel": "a"}
 

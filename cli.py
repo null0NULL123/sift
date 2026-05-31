@@ -20,11 +20,13 @@ import sys
 from config import (
     DEFAULT_FEEDS_PATH,
     DEFAULT_PROMPT_NAME,
+    SCHEDULE_INTERVALS,
     load_env,
     load_sources,
     validate_env,
     get_summary_days,
     get_summary_language,
+    get_schedule_interval,
 )
 from channels.file import FileChannel
 from channels.github_pages import GitHubPagesChannel
@@ -34,7 +36,7 @@ from processors.summarizer import SummarizeProcessor
 from storage.knowledge import KnowledgeStorage
 import workspace as ws
 
-log = logging.getLogger("signal")
+log = logging.getLogger("sift")
 
 
 def setup_logging(verbose: bool = False) -> None:
@@ -197,7 +199,7 @@ def cmd_space_delete(args: argparse.Namespace) -> None:
 
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        prog="signal",
+        prog="sift",
         description="Sift - RSS weekly digest with summary and email delivery",
     )
     parser.add_argument("-v", "--verbose", action="store_true", help="Enable debug logging")

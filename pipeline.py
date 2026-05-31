@@ -19,7 +19,7 @@ from sources.rss import RSSSource
 from sources.web import WebSource
 from storage.base import BaseStorage
 
-log = logging.getLogger("signal")
+log = logging.getLogger("sift")
 
 _SOURCE_TYPES: dict[str, type[BaseSource]] = {
     "rss": RSSSource,
@@ -98,6 +98,10 @@ class Pipeline:
             digest = self.summarize_processor.process(
                 results, language=self.language, trend_context="\n\n".join(parts)
             )
+
+            if not digest:
+                log.warning("Summarizer returned no content, skipping delivery")
+                return None
 
             for channel in self.channels:
                 log.info(f"Delivering via {channel.name}...")

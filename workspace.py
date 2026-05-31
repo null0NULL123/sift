@@ -48,8 +48,8 @@ def get_db_path(workspace: str = DEFAULT_WORKSPACE) -> str:
     """Get database path for a workspace."""
     ws_path = get_workspace_path(workspace)
     if workspace == DEFAULT_WORKSPACE:
-        return str(ws_path / "knowledge" / "signal.db")
-    return str(ws_path / "signal.db")
+        return str(ws_path / "knowledge" / "knowledge.db")
+    return str(ws_path / "knowledge.db")
 
 
 def workspace_exists(name: str) -> bool:

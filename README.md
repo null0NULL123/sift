@@ -1,4 +1,4 @@
-# Signal
+# Sift
 
 自动从你关注的信息源收集内容，用 AI 生成结构化摘要，投递到你常用的平台。
 
@@ -15,7 +15,7 @@
 
 **核心问题**：信息源分散 + 语言障碍 + 时间有限 = 被动错过重要内容。
 
-**Signal 的思路**：选定你的信息源 → 自动抓取 → AI 生成结构化摘要 → 投递到你常用的平台。数据源、处理逻辑、投递渠道完全解耦，按需扩展，不做大而全，做小而精。
+**Sift 的思路**：选定你的信息源 → 自动抓取 → AI 生成结构化摘要 → 投递到你常用的平台。数据源、处理逻辑、投递渠道完全解耦，按需扩展，不做大而全，做小而精。
 
 ## 架构
 
@@ -27,7 +27,7 @@ Sources ──▶ Pipeline ◀──▶ KnowledgeStorage ◀──▶ Channels
                              Web UI
 ```
 
-所有组件围绕 KnowledgeStorage（signal.db）交互，Pipeline 负责抓取、去重、摘要、投递。
+所有组件围绕 KnowledgeStorage（knowledge.db）交互，Pipeline 负责抓取、去重、摘要、投递。
 
 → [完整架构设计](docs/architecture.md)
 

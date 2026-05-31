@@ -14,7 +14,7 @@ from config import load_env
 from storage.knowledge import KnowledgeStorage
 import workspace as ws
 
-st.set_page_config(page_title="我的偏好 - Signal", page_icon="🎯")
+st.set_page_config(page_title="我的偏好 - Sift", page_icon="🎯")
 
 
 def init_session():

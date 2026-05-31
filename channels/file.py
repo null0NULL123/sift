@@ -8,7 +8,7 @@ from models import Digest
 
 from .base import BaseChannel
 
-log = logging.getLogger("signal")
+log = logging.getLogger("sift")
 
 
 class FileChannel(BaseChannel):
@@ -24,7 +24,7 @@ class FileChannel(BaseChannel):
 
     def send(self, digest: Digest) -> bool:
         os.makedirs(self.output_dir, exist_ok=True)
-        filepath = os.path.join(self.output_dir, f"signal-{datetime.now().strftime('%Y-%m-%d')}.md")
+        filepath = os.path.join(self.output_dir, f"sift-{datetime.now().strftime('%Y-%m-%d')}.md")
         try:
             with open(filepath, "w", encoding="utf-8") as f:
                 f.write(digest.content)

@@ -14,7 +14,7 @@ from models import Digest
 
 from .base import BaseChannel
 
-log = logging.getLogger("signal")
+log = logging.getLogger("sift")
 
 
 class EmailChannel(BaseChannel):

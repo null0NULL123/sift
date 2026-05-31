@@ -1,4 +1,4 @@
-"""Signal Dashboard - Streamlit UI for browsing digests, trends, and articles."""
+"""Sift Dashboard - Streamlit UI for browsing digests, trends, and articles."""
 
 from __future__ import annotations
 
@@ -15,7 +15,7 @@ from storage.knowledge import KnowledgeStorage
 import workspace as ws
 
 st.set_page_config(
-    page_title="Signal Dashboard",
+    page_title="Sift Dashboard",
     page_icon="📡",
     layout="wide",
 )
@@ -136,14 +136,14 @@ def main():
     init_session()
     render_workspace_selector()
 
-    st.title("📡 Signal Dashboard")
+    st.title("📡 Sift Dashboard")
     st.caption(f"工作区：{st.session_state.workspace}")
 
     storage = get_storage(st.session_state.workspace)
 
     prefs = storage.get_all_preferences()
     if not prefs.get("saved"):
-        st.info("👋 欢迎使用 Signal！请先到 **设置** 页面选择你关注的领域。")
+        st.info("👋 欢迎使用 Sift！请先到 **设置** 页面选择你关注的领域。")
         col1, col2 = st.columns(2)
         with col1:
             st.page_link("pages/settings.py", label="⚙️ 前往设置", icon="⚙️")

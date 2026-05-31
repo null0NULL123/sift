@@ -7,14 +7,14 @@ import logging
 from datetime import datetime
 from urllib.parse import urljoin
 
-import requests
+import httpx
 from bs4 import BeautifulSoup
 
 from config import HTTP_USER_AGENT, WEB_SUMMARY_TRUNCATE_LENGTH, get_int
 from models import FeedResult, Entry, SourceConfig
 from .base import BaseSource
 
-log = logging.getLogger("signal")
+log = logging.getLogger("sift")
 
 _DEFAULTS = {"selector": "article", "title_sel": "h2", "summary_sel": "p", "link_sel": "a"}
 
@@ -34,7 +34,7 @@ class WebSource(BaseSource):
             headers = meta.get("headers", {})
             headers.setdefault("User-Agent", HTTP_USER_AGENT)
 
-            resp = requests.get(self.config.url, timeout=get_int("HTTP_TIMEOUT", 15), headers=headers)
+            resp = httpx.get(self.config.url, timeout=get_int("HTTP_TIMEOUT", 15), headers=headers)
             resp.raise_for_status()
             soup = BeautifulSoup(resp.text, "html.parser")
 

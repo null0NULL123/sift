@@ -1,4 +1,4 @@
-# Signal
+# Sift
 
 Automatically collect content from your information sources, generate structured summaries with AI, and deliver them to your preferred platforms.
 
@@ -15,7 +15,7 @@ Do you also face these challenges:
 
 **Core problem**: Scattered information sources + language barriers + limited time = passively missing important content.
 
-**Signal's approach**: Select your information sources → automatic fetching → AI-generated structured summaries → delivery to your preferred platforms. Data sources, processing logic, and delivery channels are fully decoupled, extensible on demand, not aiming for everything, but for precision.
+**Sift's approach**: Select your information sources → automatic fetching → AI-generated structured summaries → delivery to your preferred platforms. Data sources, processing logic, and delivery channels are fully decoupled, extensible on demand, not aiming for everything, but for precision.
 
 ## Architecture
 
@@ -27,7 +27,7 @@ Sources ──▶ Pipeline ◀──▶ KnowledgeStorage ◀──▶ Channels
                              Web UI
 ```
 
-All components interact around KnowledgeStorage (signal.db), Pipeline handles fetching, deduplication, summarization, and delivery.
+All components interact around KnowledgeStorage (knowledge.db), Pipeline handles fetching, deduplication, summarization, and delivery.
 
 → [Complete Architecture Design](../architecture.md)
 

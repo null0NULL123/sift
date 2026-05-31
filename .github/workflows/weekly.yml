@@ -1,4 +1,4 @@
-name: Signal Weekly Report
+name: Sift Weekly Report
 
 on:
   schedule:
@@ -20,7 +20,7 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Run Signal
+      - name: Run Sift
         env:
           API_BASE_URL: ${{ secrets.API_BASE_URL }}
           API_KEY: ${{ secrets.API_KEY }}

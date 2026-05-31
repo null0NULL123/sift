@@ -1,4 +1,4 @@
-"""Pipeline orchestration for Signal.
+"""Pipeline orchestration for Sift.
 
 Coordinates: fetch -> dedup -> store -> summarize -> deliver.
 """
@@ -19,7 +19,7 @@ from sources.rss import RSSSource
 from sources.web import WebSource
 from storage.base import BaseStorage
 
-log = logging.getLogger("signal")
+log = logging.getLogger("sift")
 
 _SOURCE_TYPES: dict[str, type[BaseSource]] = {
     "rss": RSSSource,

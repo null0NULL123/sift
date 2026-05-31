@@ -14,7 +14,7 @@ from config import load_env
 from storage.knowledge import KnowledgeStorage
 import workspace as ws
 
-st.set_page_config(page_title="设置 - Signal", page_icon="⚙️")
+st.set_page_config(page_title="设置 - Sift", page_icon="⚙️")
 
 TOPICS = [
     "AI/ML", "后端开发", "前端开发", "数据库", "云原生",

@@ -27,7 +27,7 @@ from config import (
 
 def test_constants():
     assert DEFAULT_FEEDS_PATH == "feeds.json"
-    assert DEFAULT_DB_PATH == "knowledge/signal.db"
+    assert DEFAULT_DB_PATH == "knowledge/knowledge.db"
     assert DEFAULT_OUTPUT_DIR == "output"
     assert DEFAULT_LANGUAGE == "zh-CN"
     assert DEFAULT_DAYS == 7

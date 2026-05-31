@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import os
 import re
 import sqlite3
@@ -72,9 +73,10 @@ class ArticleStorage(BaseStorage):
             if h in existing:
                 continue
             try:
+                tags_json = json.dumps(entry.tags, ensure_ascii=False) if entry.tags else "[]"
                 cur = db.execute(
-                    "INSERT OR IGNORE INTO articles (hash, title, link, source, published, summary, week) VALUES (?,?,?,?,?,?,?)",
-                    (h, entry.title, entry.link, source_name, entry.published or "", entry.summary, week),
+                    "INSERT OR IGNORE INTO articles (hash, title, link, source, published, summary, tags, week) VALUES (?,?,?,?,?,?,?,?)",
+                    (h, entry.title, entry.link, source_name, entry.published or "", entry.summary, tags_json, week),
                 )
                 if cur.rowcount > 0:
                     article_ids.append((cur.lastrowid, entry))
@@ -95,18 +97,6 @@ class ArticleStorage(BaseStorage):
 
         db.commit()
         return len(article_ids)
-
-    def save_topics(self, topics: list[str], week: str | None = None) -> None:
-        db = self._get_db()
-        week = week or self._week_id()
-        clean = [(week, t.strip().lower()) for t in topics if t.strip()]
-        if not clean:
-            return
-        db.executemany(
-            "INSERT INTO topics (week, topic, count) VALUES (?, ?, 1) ON CONFLICT(week, topic) DO UPDATE SET count = count + 1",
-            clean,
-        )
-        db.commit()
 
     def cleanup_old_embeddings(self, months: int | None = None) -> int:
         """Remove embeddings older than N months. Articles are kept, only vectors are deleted."""

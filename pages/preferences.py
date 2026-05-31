@@ -17,12 +17,6 @@ import workspace as ws
 
 st.set_page_config(page_title="我的偏好 - Sift", page_icon=":material/filter_list:")
 
-TOPICS = [
-    "AI/ML", "后端开发", "前端开发", "数据库", "云原生",
-    "DevOps", "安全", "编程语言", "开源项目", "架构设计",
-    "移动开发", "大数据", "区块链", "游戏开发", "硬件/嵌入式",
-]
-
 DETAIL_LEVELS = ["精简（一句话）", "标准", "详细"]
 LANGUAGES = ["中文", "英文", "双语"]
 
@@ -75,11 +69,27 @@ def render_topic_settings(storage: KnowledgeStorage, prefs: dict):
     st.subheader("关注领域")
     st.write("选择你感兴趣的话题（可多选）：")
 
+    # Get candidate tags from database
+    db_tags = storage.get_all_tags(limit=30)
+    tag_names = [t["tag"] for t in db_tags]
+
+    # Merge saved prefs that may not be in current DB
+    all_tags = list(dict.fromkeys(prefs["topics"] + tag_names))
+
+    if not all_tags:
+        st.info("暂无话题数据。添加数据源并运行 pipeline 后，系统会自动提取话题供你选择。")
+        return
+
     selected_topics = []
     cols = st.columns(3)
-    for i, topic in enumerate(TOPICS):
+    for i, topic in enumerate(all_tags):
         with cols[i % 3]:
-            if st.checkbox(topic, value=topic in prefs["topics"], key=f"topic_{topic}"):
+            count_str = ""
+            for t in db_tags:
+                if t["tag"] == topic:
+                    count_str = f" ({t['count']})"
+                    break
+            if st.checkbox(f"{topic}{count_str}", value=topic in prefs["topics"], key=f"topic_{topic}"):
                 selected_topics.append(topic)
 
     # Detail level

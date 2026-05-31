@@ -68,13 +68,6 @@ class BaseStorage:
                 week TEXT,
                 created_at TEXT DEFAULT (datetime('now'))
             );
-            CREATE TABLE IF NOT EXISTS topics (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                week TEXT NOT NULL,
-                topic TEXT NOT NULL,
-                count INTEGER DEFAULT 1,
-                UNIQUE(week, topic)
-            );
             CREATE TABLE IF NOT EXISTS digests (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 week TEXT UNIQUE NOT NULL,
@@ -98,7 +91,6 @@ class BaseStorage:
             CREATE INDEX IF NOT EXISTS idx_articles_week ON articles(week);
             CREATE INDEX IF NOT EXISTS idx_articles_source ON articles(source);
             CREATE INDEX IF NOT EXISTS idx_articles_published ON articles(published);
-            CREATE INDEX IF NOT EXISTS idx_topics_week ON topics(week);
             CREATE INDEX IF NOT EXISTS idx_feedback_article ON article_feedback(article_id);
             CREATE INDEX IF NOT EXISTS idx_feedback_type ON article_feedback(feedback_type);
         """)

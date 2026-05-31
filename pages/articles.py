@@ -42,7 +42,7 @@ def render_workspace_selector():
             st.rerun()
 
 
-def render_article_card(article):
+def render_article_card(article, storage: KnowledgeStorage):
     with st.container(border=True):
         st.markdown(f"**[{article.title}]({article.link})**")
         meta_parts = []
@@ -59,6 +59,43 @@ def render_article_card(article):
             st.write(clean[:300] + ("..." if len(clean) > 300 else ""))
         if article.tags:
             st.write(" ".join(f"`{t}`" for t in article.tags))
+
+        # Feedback buttons
+        feedback_types = storage.get_article_feedback(article.id)
+        col1, col2, col3, _ = st.columns([1, 1, 1, 5])
+
+        with col1:
+            like_active = "like" in feedback_types
+            if st.button(
+                "👍" if like_active else "👍",
+                key=f"like_{article.id}",
+                type="primary" if like_active else "secondary",
+                use_container_width=True,
+            ):
+                storage.toggle_feedback(article.id, "like")
+                st.rerun()
+
+        with col2:
+            dislike_active = "dislike" in feedback_types
+            if st.button(
+                "👎" if dislike_active else "👎",
+                key=f"dislike_{article.id}",
+                type="primary" if dislike_active else "secondary",
+                use_container_width=True,
+            ):
+                storage.toggle_feedback(article.id, "dislike")
+                st.rerun()
+
+        with col3:
+            bookmark_active = "bookmark" in feedback_types
+            if st.button(
+                "⭐" if bookmark_active else "⭐",
+                key=f"bookmark_{article.id}",
+                type="primary" if bookmark_active else "secondary",
+                use_container_width=True,
+            ):
+                storage.toggle_feedback(article.id, "bookmark")
+                st.rerun()
 
 
 def main():
@@ -77,8 +114,23 @@ def main():
         weeks = st.slider("回溯周数", 1, 24, 4)
         keyword = st.text_input("关键词搜索")
 
-    # Get articles
-    articles = storage.get_articles(weeks=weeks)
+        st.divider()
+        st.header("反馈筛选")
+        feedback_filter = st.radio(
+            "显示文章",
+            ["全部", "👍 喜欢", "👎 不喜欢", "⭐ 收藏"],
+            index=0,
+        )
+
+    # Get articles based on filter
+    if feedback_filter == "全部":
+        articles = storage.get_articles(weeks=weeks)
+    elif feedback_filter == "👍 喜欢":
+        articles = storage.get_feedback_articles("like")
+    elif feedback_filter == "👎 不喜欢":
+        articles = storage.get_feedback_articles("dislike")
+    else:  # ⭐ 收藏
+        articles = storage.get_feedback_articles("bookmark")
 
     # Apply keyword filter
     if keyword:
@@ -100,7 +152,7 @@ def main():
 
     # Display
     for article in articles[:50]:
-        render_article_card(article)
+        render_article_card(article, storage)
 
     if len(articles) > 50:
         st.caption(f"仅显示前 50 篇，共 {len(articles)} 篇")

@@ -59,13 +59,29 @@ def render_workspace_selector():
                 except ValueError as e:
                     st.error(str(e))
 
+        st.divider()
+        st.page_link("pages/preferences.py", label="🎯 我的偏好", icon="🎯")
+        st.page_link("pages/articles.py", label="📄 文章浏览", icon="📄")
+        st.page_link("pages/settings.py", label="⚙️ 设置", icon="⚙️")
+
 
 def render_stats(storage: KnowledgeStorage):
     stats = storage.get_stats()
+    feedback_stats = storage.get_feedback_stats()
+
+    # Main stats
     cols = st.columns(4)
     labels = [("📄 文章", "articles"), ("📡 数据源", "sources"), ("📰 周报", "digests"), ("📅 周数", "weeks")]
     for col, (label, key) in zip(cols, labels):
         col.metric(label, stats[key])
+
+    # Feedback stats
+    if any(v > 0 for v in feedback_stats.values()):
+        st.caption("📊 反馈统计")
+        fc1, fc2, fc3 = st.columns(3)
+        fc1.metric("👍 喜欢", feedback_stats.get("like", 0))
+        fc2.metric("👎 不喜欢", feedback_stats.get("dislike", 0))
+        fc3.metric("⭐ 收藏", feedback_stats.get("bookmark", 0))
 
 
 def render_trends(storage: KnowledgeStorage):
@@ -128,7 +144,11 @@ def main():
     prefs = storage.get_all_preferences()
     if not prefs.get("saved"):
         st.info("👋 欢迎使用 Signal！请先到 **设置** 页面选择你关注的领域。")
-        st.page_link("pages/settings.py", label="⚙️ 前往设置", icon="⚙️")
+        col1, col2 = st.columns(2)
+        with col1:
+            st.page_link("pages/settings.py", label="⚙️ 前往设置", icon="⚙️")
+        with col2:
+            st.page_link("pages/preferences.py", label="🎯 我的偏好", icon="🎯")
         st.divider()
 
     render_stats(storage)

@@ -60,9 +60,8 @@ def render_workspace_selector():
                     st.error(str(e))
 
         st.divider()
-        st.page_link("pages/preferences.py", label="🎯 我的偏好", icon="🎯")
-        st.page_link("pages/articles.py", label="📄 文章浏览", icon="📄")
-        st.page_link("pages/settings.py", label="⚙️ 设置", icon="⚙️")
+        st.page_link("pages/preferences.py", label="我的偏好", icon="🎯")
+        st.page_link("pages/articles.py", label="文章浏览", icon="📄")
 
 
 def render_stats(storage: KnowledgeStorage):
@@ -144,11 +143,7 @@ def main():
     prefs = storage.get_all_preferences()
     if not prefs.get("saved"):
         st.info("👋 欢迎使用 Signal！请先到 **设置** 页面选择你关注的领域。")
-        col1, col2 = st.columns(2)
-        with col1:
-            st.page_link("pages/settings.py", label="⚙️ 前往设置", icon="⚙️")
-        with col2:
-            st.page_link("pages/preferences.py", label="🎯 我的偏好", icon="🎯")
+        st.page_link("pages/preferences.py", label="前往偏好设置", icon="🎯")
         st.divider()
 
     render_stats(storage)

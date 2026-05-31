@@ -12,7 +12,7 @@ from channels.base import BaseChannel
 from config import LOCALE, get_env
 from models import Digest
 
-log = logging.getLogger("signal")
+log = logging.getLogger("sift")
 
 
 def _docs_dir() -> Path:
@@ -50,18 +50,18 @@ class GitHubPagesChannel(BaseChannel):
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Signal - {date_str}</title>
+  <title>Sift - {date_str}</title>
   <link rel="stylesheet" href="../style.css">
 </head>
 <body>
   <div class="container">
     <header>
-      <h1>📡 Signal</h1>
+      <h1>Sift</h1>
       <p class="date">{date_str} | {LOCALE['email_ai_tag']}</p>
       <nav><a href="../index.html">{LOCALE['pages_back']}</a></nav>
     </header>
     <article>{body}</article>
-    <footer><p>{LOCALE['pages_footer']} | Powered by AI</p></footer>
+    <footer><p>{LOCALE['pages_footer']}</p></footer>
   </div>
 </body>
 </html>"""
@@ -77,13 +77,13 @@ class GitHubPagesChannel(BaseChannel):
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Signal - {LOCALE['email_subject']}</title>
+  <title>Sift - {LOCALE['email_subject']}</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
     <header>
-      <h1>📡 Signal</h1>
+      <h1>Sift</h1>
       <p class="subtitle">{LOCALE['pages_subtitle']}</p>
       <p class="description">{LOCALE['pages_description']}</p>
     </header>

@@ -1,4 +1,4 @@
-"""Data models for Signal layered architecture.
+"""Data models for Sift layered architecture.
 
 All dataclasses used across the pipeline: fetching, processing, digest generation, and storage.
 """

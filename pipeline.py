@@ -1,4 +1,4 @@
-"""Pipeline orchestration for Signal.
+"""Pipeline orchestration for Sift.
 
 Coordinates: fetch -> dedup -> store -> summarize -> deliver.
 """
@@ -94,7 +94,7 @@ class Pipeline:
             if parts:
                 log.info(f"Injecting {len(parts)} context block(s) into summary")
 
-            log.info("Generating AI summary...")
+            log.info("Generating summary...")
             digest = self.summarize_processor.process(
                 results, language=self.language, trend_context="\n\n".join(parts)
             )

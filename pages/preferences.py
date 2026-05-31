@@ -15,7 +15,7 @@ from config import load_env
 from storage.knowledge import KnowledgeStorage
 import workspace as ws
 
-st.set_page_config(page_title="我的偏好 - Sift", page_icon="🎯")
+st.set_page_config(page_title="我的偏好 - Sift", page_icon=":material/filter_list:")
 
 TOPICS = [
     "AI/ML", "后端开发", "前端开发", "数据库", "云原生",
@@ -44,7 +44,7 @@ def get_storage(workspace: str):
 def render_workspace_selector():
     workspaces = ws.list_workspaces()
     with st.sidebar:
-        st.header("🗂️ 工作区")
+        st.header("工作区")
         current_idx = workspaces.index(st.session_state.workspace) if st.session_state.workspace in workspaces else 0
         selected = st.selectbox("选择工作区", workspaces, index=current_idx, label_visibility="collapsed")
         if selected != st.session_state.workspace:
@@ -72,7 +72,7 @@ def save_preferences(storage: KnowledgeStorage, prefs: dict):
 
 def render_topic_settings(storage: KnowledgeStorage, prefs: dict):
     """Render topic selection and preference settings."""
-    st.subheader("🎯 关注领域")
+    st.subheader("关注领域")
     st.write("选择你感兴趣的话题（可多选）：")
 
     selected_topics = []
@@ -83,7 +83,7 @@ def render_topic_settings(storage: KnowledgeStorage, prefs: dict):
                 selected_topics.append(topic)
 
     # Detail level
-    st.subheader("📝 摘要详细度")
+    st.subheader("摘要详细度")
     detail_level = st.radio(
         "选择摘要的详细程度：",
         DETAIL_LEVELS,
@@ -92,7 +92,7 @@ def render_topic_settings(storage: KnowledgeStorage, prefs: dict):
     )
 
     # Language
-    st.subheader("🌐 语言偏好")
+    st.subheader("语言偏好")
     language = st.radio(
         "周报输出语言：",
         LANGUAGES,
@@ -103,14 +103,14 @@ def render_topic_settings(storage: KnowledgeStorage, prefs: dict):
     st.divider()
 
     if selected_topics:
-        st.subheader("📋 偏好预览")
+        st.subheader("偏好预览")
         st.write(f"**关注领域**：{', '.join(selected_topics)}")
         st.write(f"**摘要详细度**：{detail_level}")
         st.write(f"**语言**：{language}")
 
     col1, col2 = st.columns(2)
     with col1:
-        if st.button("💾 保存偏好", type="primary", use_container_width=True):
+        if st.button("保存偏好", type="primary", use_container_width=True):
             new_prefs = {
                 "topics": selected_topics,
                 "detail_level": detail_level,
@@ -118,11 +118,11 @@ def render_topic_settings(storage: KnowledgeStorage, prefs: dict):
                 "saved": True,
             }
             save_preferences(storage, new_prefs)
-            st.success("✅ 偏好已保存！生成周报时会参考你的偏好。")
+            st.success("偏好已保存")
             st.rerun()
 
     with col2:
-        if st.button("🗑️ 清除偏好", use_container_width=True):
+        if st.button("清除偏好", use_container_width=True):
             storage.set_preference("saved", "false")
             storage.set_preference("topics", "[]")
             st.info("偏好已清除。")
@@ -134,22 +134,22 @@ def render_topic_settings(storage: KnowledgeStorage, prefs: dict):
 
 def render_feedback_stats(storage: KnowledgeStorage):
     """Render feedback statistics."""
-    st.subheader("📊 反馈统计")
+    st.subheader("反馈统计")
 
     stats = storage.get_feedback_stats()
     col1, col2, col3 = st.columns(3)
 
     with col1:
-        st.metric("👍 喜欢", stats.get("like", 0))
+        st.metric("喜欢", stats.get("like", 0))
     with col2:
-        st.metric("👎 不喜欢", stats.get("dislike", 0))
+        st.metric("不喜欢", stats.get("dislike", 0))
     with col3:
-        st.metric("⭐ 收藏", stats.get("bookmark", 0))
+        st.metric("收藏", stats.get("bookmark", 0))
 
 
 def render_preference_analysis(storage: KnowledgeStorage):
     """Render preference analysis based on feedback."""
-    st.subheader("🔍 偏好分析")
+    st.subheader("偏好分析")
 
     # Liked sources
     liked_sources = storage.get_liked_sources(5)
@@ -172,11 +172,11 @@ def render_article_card_simple(article):
         st.markdown(f"**[{article.title}]({article.link})**")
         meta_parts = []
         if article.source:
-            meta_parts.append(f"📡 {article.source}")
+            meta_parts.append(article.source)
         if article.week:
-            meta_parts.append(f"📅 {article.week}")
+            meta_parts.append(article.week)
         if article.published:
-            meta_parts.append(f"🕐 {article.published[:10]}")
+            meta_parts.append(article.published[:10])
         if meta_parts:
             st.caption(" | ".join(meta_parts))
         if article.summary:
@@ -186,9 +186,9 @@ def render_article_card_simple(article):
 
 def render_feedback_history(storage: KnowledgeStorage):
     """Render feedback history tabs."""
-    st.subheader("📜 反馈历史")
+    st.subheader("反馈历史")
 
-    tab1, tab2, tab3 = st.tabs(["👍 喜欢", "⭐ 收藏", "👎 不喜欢"])
+    tab1, tab2, tab3 = st.tabs(["喜欢", "收藏", "不喜欢"])
 
     with tab1:
         liked = storage.get_feedback_articles("like", limit=20)
@@ -217,7 +217,7 @@ def render_feedback_history(storage: KnowledgeStorage):
 
 def render_recommendations(storage: KnowledgeStorage):
     """Render smart recommendations based on feedback."""
-    st.subheader("✨ 猜你喜欢")
+    st.subheader("猜你喜欢")
 
     recommended = storage.get_recommended_articles(limit=10)
     if recommended:
@@ -232,7 +232,7 @@ def main():
     init_session()
     render_workspace_selector()
 
-    st.title("🎯 我的偏好")
+    st.title("我的偏好")
     st.caption(f"工作区：{st.session_state.workspace}")
 
     storage = get_storage(st.session_state.workspace)

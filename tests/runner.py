@@ -80,7 +80,7 @@ class TestRunner:
             self.run_test(name, fn)
 
     def run(self, filters: set[str] | None = None) -> bool:
-        print("Signal Test Suite")
+        print("Sift Test Suite")
         print("=" * 50)
 
         for mod_name in MODULES:

@@ -29,7 +29,7 @@ def test_file_channel():
 
         files = list(tmpdir.glob("*.md"))
         assert len(files) == 1
-        assert "signal-" in files[0].name
+        assert "sift-" in files[0].name
         assert files[0].read_text() == "# Test\nHello world"
 
 
@@ -50,7 +50,7 @@ def test_github_pages_channel():
 
             index = tmpdir / "index.html"
             assert index.exists()
-            assert "Signal" in index.read_text()
+            assert "Sift" in index.read_text()
 
 
 def test_email_channel():
@@ -65,7 +65,7 @@ def test_email_channel():
         d = Digest(content="# Digest Title\n\n- Article 1\n- Article 2\n\n---\nFooter")
         msg = ch._build_message(d.content)
 
-        assert "Signal" in msg["Subject"]
+        assert "Sift" in msg["Subject"]
         assert msg["From"] == "test@example.com"
         assert msg["To"] == "receiver@example.com"
 
@@ -88,7 +88,7 @@ def test_email_send_real():
         return
 
     ch = EmailChannel()
-    d = Digest(content="# Test Email\n\nThis is a test from Signal test suite.\n\n- Item 1\n- Item 2")
+    d = Digest(content="# Test Email\n\nThis is a test from Sift test suite.\n\n- Item 1\n- Item 2")
     assert ch.send(d) is True
 
 

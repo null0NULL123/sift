@@ -18,7 +18,7 @@ from models import SourceConfig
 
 # Paths
 DEFAULT_FEEDS_PATH = "feeds.json"
-DEFAULT_DB_PATH = "knowledge/signal.db"
+DEFAULT_DB_PATH = "knowledge/knowledge.db"
 DEFAULT_OUTPUT_DIR = "output"
 DEFAULT_ENV_PATH = ".env"
 
@@ -48,7 +48,7 @@ HASH_TRUNCATE_LENGTH = 16
 
 # HTTP
 HTTP_TIMEOUT = 15
-HTTP_USER_AGENT = "Mozilla/5.0 (compatible; Signal/1.0)"
+HTTP_USER_AGENT = "Mozilla/5.0 (compatible; Sift/1.0)"
 
 # Email
 EMAIL_MAX_RETRIES = 3
@@ -71,12 +71,12 @@ MIN_KEYWORD_LENGTH = 3
 
 # Locale strings
 LOCALE = {
-    "email_subject": "Signal 周报",
-    "email_footer": "由 Signal 自动生成 | Powered by AI",
-    "email_ai_tag": "AI 自动摘要",
+    "email_subject": "Sift 周报",
+    "email_footer": "由 Sift 自动生成",
+    "email_ai_tag": "自动摘要",
     "pages_subtitle": "从噪音中提取信号",
-    "pages_description": "每周自动从高质量信息源抓取内容，用 AI 生成精炼摘要。",
-    "pages_footer": "由 Signal 自动生成",
+    "pages_description": "每周自动从高质量信息源抓取内容，生成精炼摘要。",
+    "pages_footer": "由 Sift 自动生成",
     "pages_history_title": "历史周报",
     "pages_back": "← 返回目录",
     "trend_header": "历史趋势参考（供摘要参考，不输出到周报中）",

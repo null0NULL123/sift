@@ -1,4 +1,4 @@
-"""Command-line interface for Signal.
+"""Command-line interface for Sift.
 
 Usage::
 
@@ -198,7 +198,7 @@ def cmd_space_delete(args: argparse.Namespace) -> None:
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="signal",
-        description="Signal - RSS weekly digest with AI summary and email delivery",
+        description="Sift - RSS weekly digest with summary and email delivery",
     )
     parser.add_argument("-v", "--verbose", action="store_true", help="Enable debug logging")
     parser.add_argument("--workspace", "-w", default=ws.DEFAULT_WORKSPACE, help=f"Workspace name (default: {ws.DEFAULT_WORKSPACE})")

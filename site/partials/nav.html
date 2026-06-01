@@ -1,11 +1,20 @@
 <nav class="nav">
   <div class="container nav-inner">
-    <a href="/" class="nav-logo">Sift</a>
+    <a href="" class="nav-logo" data-link>Sift</a>
     <div class="nav-links">
-      <a href="/features.html">功能</a>
-      <a href="/workflow.html">工作流</a>
-      <a href="/digests.html">周报</a>
+      <a href="features.html" data-link>功能</a>
+      <a href="workflow.html" data-link>工作流</a>
+      <a href="digests.html" data-link>周报</a>
       <a href="https://github.com/null0NULL123/sift" class="btn btn-nav">GitHub</a>
     </div>
   </div>
 </nav>
+<script>
+(function(){
+  var base = document.querySelector('base');
+  var root = base ? base.href : location.href.replace(/[^/]*$/, '');
+  document.querySelectorAll('[data-link]').forEach(function(a){
+    if(a.getAttribute('href')) a.href = root + a.getAttribute('href');
+  });
+})();
+</script>

@@ -13,11 +13,24 @@ from pathlib import Path
 
 DEFAULT_WORKSPACE = "default"
 WORKSPACE_DIR = "workspaces"
+DEFAULT_FEEDS = [
+    {"name": "GitHub Blog", "url": "https://github.blog/feed/", "lang": "en"},
+    {"name": "Meta Engineering", "url": "https://engineering.fb.com/feed/", "lang": "en"},
+    {"name": "Netflix Tech Blog", "url": "https://netflixtechblog.com/feed", "lang": "en"},
+    {"name": "Simon Willison", "url": "https://simonwillison.net/atom/everything/", "lang": "en"},
+    {"name": "The Pragmatic Engineer", "url": "https://newsletter.pragmaticengineer.com/feed", "lang": "en"},
+    {"name": "Hacker News", "url": "https://news.ycombinator.com/", "lang": "en", "source_type": "web", "metadata": {"selector": ".athing", "title_sel": ".titleline > a", "summary_sel": "", "link_sel": ".titleline > a"}},
+]
 
 
 def get_workspace_root() -> Path:
     """Get the root directory for all workspaces."""
-    return Path(os.environ.get("WORKSPACE_ROOT", WORKSPACE_DIR))
+    root = os.environ.get("WORKSPACE_ROOT", WORKSPACE_DIR)
+    path = Path(root)
+    if not path.is_absolute():
+        # Make relative to project root (where workspace.py lives)
+        path = Path(__file__).parent / path
+    return path
 
 
 def list_workspaces() -> list[str]:
@@ -35,7 +48,7 @@ def get_workspace_path(name: str) -> Path:
     """Get the path to a workspace directory."""
     if name == DEFAULT_WORKSPACE:
         # Default workspace uses project root (backward compatible)
-        return Path(".")
+        return Path(__file__).parent
     return get_workspace_root() / name
 
 
@@ -82,7 +95,7 @@ def create_workspace(name: str, feeds: list[dict] | None = None) -> Path:
     ws_path.mkdir(parents=True, exist_ok=True)
 
     # Create feeds.json
-    feeds_data = feeds or []
+    feeds_data = feeds if feeds is not None else DEFAULT_FEEDS
     (ws_path / "feeds.json").write_text(json.dumps(feeds_data, indent=2, ensure_ascii=False))
 
     return ws_path

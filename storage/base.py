@@ -55,6 +55,11 @@ class BaseStorage:
     def initialize(self) -> None:
         """Initialize database schema and vector table."""
         db = self._get_db()
+        # Migrate: add llm_summary column if missing
+        try:
+            db.execute("ALTER TABLE articles ADD COLUMN llm_summary TEXT")
+        except Exception:
+            pass  # Column already exists
         db.executescript("""
             CREATE TABLE IF NOT EXISTS articles (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -64,6 +69,7 @@ class BaseStorage:
                 source TEXT NOT NULL,
                 published TEXT,
                 summary TEXT,
+                llm_summary TEXT,
                 tags TEXT DEFAULT '[]',
                 week TEXT,
                 created_at TEXT DEFAULT (datetime('now'))
@@ -122,7 +128,8 @@ class BaseStorage:
     def _row_to_article(r: sqlite3.Row) -> ArticleRecord:
         return ArticleRecord(
             id=r["id"], hash=r["hash"], title=r["title"], link=r["link"],
-            source=r["source"], published=r["published"], summary=r["summary"],
+            source=r["source"], published=r["published"],
+            summary=r["summary"], llm_summary=r["llm_summary"] if "llm_summary" in r.keys() else "",
             tags=json.loads(r["tags"]) if r["tags"] else [],
             week=r["week"], created_at=r["created_at"],
         )

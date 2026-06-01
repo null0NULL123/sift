@@ -54,9 +54,13 @@ def render_article_card(article, storage: KnowledgeStorage):
             meta_parts.append(article.published[:10])
         if meta_parts:
             st.caption(" | ".join(meta_parts))
-        if article.summary:
-            clean = re.sub(r"<[^>]+>", "", article.summary)
+        # Show LLM summary if available, otherwise show original summary
+        summary_text = article.llm_summary or article.summary
+        if summary_text:
+            clean = re.sub(r"<[^>]+>", "", summary_text)
             st.write(clean[:300] + ("..." if len(clean) > 300 else ""))
+        if article.llm_summary:
+            st.caption("AI 摘要")
         if article.tags:
             st.write(" ".join(f"`{t}`" for t in article.tags))
 
@@ -115,6 +119,15 @@ def main():
         keyword = st.text_input("关键词搜索")
 
         st.divider()
+        st.header("显示模式")
+        view_mode = st.radio(
+            "文章类型",
+            ["全部", "精选"],
+            index=0,
+            label_visibility="collapsed",
+        )
+
+        st.divider()
         st.header("反馈筛选")
         feedback_filter = st.radio(
             "显示文章",
@@ -123,7 +136,9 @@ def main():
         )
 
     # Get articles based on filter
-    if feedback_filter == "全部":
+    if view_mode == "精选":
+        articles = storage.get_selected_articles(weeks=weeks)
+    elif feedback_filter == "全部":
         articles = storage.get_articles(weeks=weeks)
     elif feedback_filter == "喜欢":
         articles = storage.get_feedback_articles("like")

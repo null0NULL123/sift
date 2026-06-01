@@ -106,6 +106,9 @@ def render_workspace_selector():
                     )
                     if result.returncode == 0:
                         st.success("更新完成")
+                        if result.stdout:
+                            st.code(result.stdout, language=None)
+                        st.rerun()
                     else:
                         st.error(result.stderr[-200:] if result.stderr else "更新失败")
                 except subprocess.TimeoutExpired:

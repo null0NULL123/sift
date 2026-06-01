@@ -98,6 +98,38 @@ class ArticleStorage(BaseStorage):
         db.commit()
         return len(article_ids)
 
+    def update_llm_summary(self, article_id: int, llm_summary: str) -> None:
+        """Update LLM summary for an article."""
+        db = self._get_db()
+        db.execute("UPDATE articles SET llm_summary = ? WHERE id = ?", (llm_summary, article_id))
+        db.commit()
+
+    def update_llm_summary_by_title(self, title: str, llm_summary: str) -> bool:
+        """Update LLM summary by matching article title. Returns True if updated."""
+        db = self._get_db()
+        cur = db.execute("UPDATE articles SET llm_summary = ? WHERE title = ?", (llm_summary, title))
+        db.commit()
+        return cur.rowcount > 0
+
+    def update_llm_summary_by_link(self, link: str, llm_summary: str) -> bool:
+        """Update LLM summary by matching article link. Returns True if updated."""
+        db = self._get_db()
+        cur = db.execute("UPDATE articles SET llm_summary = ? WHERE link = ?", (llm_summary, link))
+        db.commit()
+        return cur.rowcount > 0
+
+    def get_selected_articles(self, weeks: int = 4) -> list[ArticleRecord]:
+        """Get articles that have LLM summaries (selected/featured)."""
+        db = self._get_db()
+        db.row_factory = sqlite3.Row
+        cutoff = self._week_id(datetime.now(timezone.utc) - timedelta(weeks=weeks))
+        rows = db.execute(
+            "SELECT * FROM articles WHERE week >= ? AND llm_summary IS NOT NULL AND llm_summary != '' ORDER BY published DESC",
+            (cutoff,),
+        ).fetchall()
+        db.row_factory = None
+        return [self._row_to_article(r) for r in rows]
+
     def cleanup_old_embeddings(self, months: int | None = None) -> int:
         """Remove embeddings older than N months. Articles are kept, only vectors are deleted."""
         from config import EMBEDDING_RETENTION_MONTHS

@@ -21,14 +21,13 @@ from sift.storage.knowledge import KnowledgeStorage
 def temp_db():
     """Context manager providing a temporary KnowledgeStorage instance."""
     with tempfile.TemporaryDirectory() as tmpdir:
-        os.environ["DB_PATH"] = os.path.join(tmpdir, "test.db")
+        db_path = os.path.join(tmpdir, "test.db")
+        ks = KnowledgeStorage(db_path=db_path)
+        ks.initialize()
         try:
-            ks = KnowledgeStorage()
-            ks.initialize()
             yield ks
-            ks.close()
         finally:
-            os.environ.pop("DB_PATH", None)
+            ks.close()
 
 
 @contextmanager

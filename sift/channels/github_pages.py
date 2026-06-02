@@ -63,8 +63,9 @@ class GitHubPagesChannel(BaseChannel):
   </div>
   <div id="footer-include"></div>
   <script>
-    fetch(window.__sift_root + 'partials/nav.html').then(r => r.text()).then(t => { document.getElementById('nav-include').innerHTML = t; });
-    fetch(window.__sift_root + 'partials/footer.html').then(r => r.text()).then(t => document.getElementById('footer-include').innerHTML = t);
+    var root = location.pathname.indexOf("/sift/") === 0 ? "/sift/" : "/";
+    fetch(root + 'partials/nav.html').then(r => r.text()).then(t => document.getElementById('nav-include').innerHTML = t);
+    fetch(root + 'partials/footer.html').then(r => r.text()).then(t => document.getElementById('footer-include').innerHTML = t);
   </script>
 </body>
 </html>"""

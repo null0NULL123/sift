@@ -5,7 +5,7 @@ from __future__ import annotations
 import os
 
 from base import env_vars, temp_file, temp_json
-from config import (
+from sift.config import (
     DEFAULT_SOURCE_LANG,
     DEFAULT_SOURCE_TYPE,
     get_env,

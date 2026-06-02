@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from base import make_entry, make_feed, make_source
-from models import Digest, Entry, FeedResult, SourceConfig
+from sift.models import Digest, Entry, FeedResult, SourceConfig
 
 
 def test_source_config():

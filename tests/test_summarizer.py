@@ -3,9 +3,9 @@
 from __future__ import annotations
 
 from base import make_entry, make_feed, make_source
-from config import LOCALE
-from models import FeedResult
-from processors.summarizer import SummarizeProcessor, _prompts_dir, load_prompt
+from sift.config import LOCALE
+from sift.models import FeedResult
+from sift.processors.summarizer import SummarizeProcessor, _prompts_dir, load_prompt
 
 
 def test_prompt_loading():

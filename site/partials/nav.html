@@ -11,10 +11,15 @@
 </nav>
 <script>
 (function(){
-  var base = document.querySelector('base');
-  var root = base ? base.href : location.href.replace(/[^/]*$/, '');
+  // Calculate site root: /sift/ for GH Pages, / for local
+  var path = location.pathname;
+  var root = path.indexOf('/sift/') === 0 ? '/sift/' : '/';
+  // Resolve all data-link anchors
   document.querySelectorAll('[data-link]').forEach(function(a){
-    if(a.getAttribute('href')) a.href = root + a.getAttribute('href');
+    var href = a.getAttribute('href');
+    if(href) a.href = root + href;
   });
+  // Expose root for fetch calls
+  window.__sift_root = root;
 })();
 </script>

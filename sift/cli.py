@@ -17,7 +17,7 @@ import json
 import logging
 import sys
 
-from config import (
+from sift.config import (
     DEFAULT_FEEDS_PATH,
     DEFAULT_PROMPT_NAME,
     load_env,
@@ -26,13 +26,13 @@ from config import (
     get_summary_days,
     get_summary_language,
 )
-from channels.file import FileChannel
-from channels.github_pages import GitHubPagesChannel
-from pipeline import Pipeline, create_source
-from sources.base import BaseSource
-from processors.summarizer import SummarizeProcessor
-from storage.knowledge import KnowledgeStorage
-import workspace as ws
+from sift.channels.file import FileChannel
+from sift.channels.github_pages import GitHubPagesChannel
+from sift.pipeline import Pipeline, create_source
+from sift.sources.base import BaseSource
+from sift.processors.summarizer import SummarizeProcessor
+from sift.storage.knowledge import KnowledgeStorage
+import sift.workspace as ws
 
 log = logging.getLogger("sift")
 
@@ -77,7 +77,7 @@ def cmd_run(args: argparse.Namespace) -> None:
 
     channels: list = [FileChannel(), GitHubPagesChannel()]
     if args.email:
-        from channels.email import EmailChannel
+        from sift.channels.email import EmailChannel
         channels.append(EmailChannel())
 
     storage = _resolve_storage(args)

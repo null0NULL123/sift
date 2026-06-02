@@ -6,7 +6,7 @@ import json
 import sqlite3
 from datetime import datetime, timedelta, timezone
 
-from models import Digest
+from sift.models import Digest
 
 from .base import BaseStorage
 

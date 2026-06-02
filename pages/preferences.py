@@ -11,9 +11,9 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 import streamlit as st
 
-from config import load_env
-from storage.knowledge import KnowledgeStorage
-import workspace as ws
+from sift.config import load_env
+from sift.storage.knowledge import KnowledgeStorage
+import sift.workspace as ws
 
 st.set_page_config(page_title="我的偏好 - Sift", page_icon=":material/filter_list:")
 

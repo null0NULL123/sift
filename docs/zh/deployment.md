@@ -84,7 +84,7 @@ pip install -r requirements.txt        # 纯 CLI
 # pip install -r requirements-ui.txt   # CLI + Web UI（可选）
 cp .env.example .env
 vi .env          # 填入你的配置
-python3 cli.py run
+python3 sift/cli.py run
 ```
 
 需要 Web UI 时安装 `requirements-ui.txt`，然后启动：
@@ -106,7 +106,7 @@ Termux 环境下可一键部署：
 git clone <repo> sift && cd sift
 bash setup.sh
 vi .env
-.venv/bin/python3 cli.py run
+.venv/bin/python3 sift/cli.py run
 crond  # 启动定时任务
 ```
 
@@ -157,15 +157,15 @@ crond  # 启动定时任务
 实现方式：通过 `--profile` 切换 prompt 模板，通过 `--feeds` 切换数据源：
 
 ```bash
-python3 cli.py run --profile tech-weekly                    # 技术周报（默认源）
-python3 cli.py run --profile finance-weekly --feeds finance.json  # 投研周报
-python3 cli.py run --profile papers-weekly --feeds papers.json    # 论文周报
+python3 sift/cli.py run --profile tech-weekly                    # 技术周报（默认源）
+python3 sift/cli.py run --profile finance-weekly --feeds finance.json  # 投研周报
+python3 sift/cli.py run --profile papers-weekly --feeds papers.json    # 论文周报
 ```
 
 也可以设不同的发送时间：
 
 ```
-0 8 * * 1   python3 cli.py run --profile tech-weekly
-0 9 * * 1   python3 cli.py run --profile finance-weekly --feeds finance.json
-0 8 * * 5   python3 cli.py run --profile papers-weekly --feeds papers.json
+0 8 * * 1   python3 sift/cli.py run --profile tech-weekly
+0 9 * * 1   python3 sift/cli.py run --profile finance-weekly --feeds finance.json
+0 8 * * 5   python3 sift/cli.py run --profile papers-weekly --feeds papers.json
 ```

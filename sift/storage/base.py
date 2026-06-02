@@ -12,7 +12,7 @@ from pathlib import Path
 
 import sqlite_vec
 
-from config import (
+from sift.config import (
     DEFAULT_DB_PATH,
     DEFAULT_EMBEDDING_DIM,
     EMBEDDING_MAX_INPUT_LENGTH,
@@ -20,7 +20,7 @@ from config import (
     get_env,
     get_int,
 )
-from models import ArticleRecord
+from sift.models import ArticleRecord
 
 
 class BaseStorage:

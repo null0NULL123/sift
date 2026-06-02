@@ -11,8 +11,8 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 import streamlit as st
 
-from config import DEFAULT_ENV_PATH
-import workspace as ws
+from sift.config import DEFAULT_ENV_PATH
+import sift.workspace as ws
 
 st.set_page_config(page_title="设置 - Sift", page_icon=":material/settings:")
 

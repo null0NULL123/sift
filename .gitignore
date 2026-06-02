@@ -3,7 +3,7 @@ output/
 __pycache__/
 *.pyc
 .venv/
-knowledge/*.db
-knowledge/*.db-shm
-knowledge/*.db-wal
+sift/knowledge/*.db
+sift/knowledge/*.db-shm
+sift/knowledge/*.db-wal
 workspaces/

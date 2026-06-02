@@ -5,9 +5,9 @@ from datetime import datetime, timezone
 
 import feedparser
 
-from config import RSS_SUMMARY_TRUNCATE_LENGTH
-from models import Entry, FeedResult, SourceConfig
-from sources.base import BaseSource
+from sift.config import RSS_SUMMARY_TRUNCATE_LENGTH
+from sift.models import Entry, FeedResult, SourceConfig
+from sift.sources.base import BaseSource
 
 
 class RSSSource(BaseSource):

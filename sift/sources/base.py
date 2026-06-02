@@ -3,7 +3,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from datetime import datetime
 
-from models import FeedResult, SourceConfig
+from sift.models import FeedResult, SourceConfig
 
 
 class BaseSource(ABC):

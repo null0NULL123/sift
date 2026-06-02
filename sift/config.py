@@ -10,7 +10,7 @@ import json
 import os
 from pathlib import Path
 
-from models import SourceConfig
+from sift.models import SourceConfig
 
 # ---------------------------------------------------------------------------
 # Project-wide constants (single source of truth)
@@ -18,7 +18,7 @@ from models import SourceConfig
 
 # Paths
 DEFAULT_FEEDS_PATH = "feeds.json"
-DEFAULT_DB_PATH = "knowledge/knowledge.db"
+DEFAULT_DB_PATH = "sift/knowledge/knowledge.db"
 DEFAULT_OUTPUT_DIR = "output"
 DEFAULT_ENV_PATH = ".env"
 

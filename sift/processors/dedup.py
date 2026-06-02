@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import hashlib
 
-from config import HASH_TRUNCATE_LENGTH
-from models import Entry, FeedResult
+from sift.config import HASH_TRUNCATE_LENGTH
+from sift.models import Entry, FeedResult
 
 from .base import BaseProcessor
 

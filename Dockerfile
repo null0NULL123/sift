@@ -25,12 +25,7 @@ COPY --from=builder /app/.venv /app/.venv
 ENV PATH="/app/.venv/bin:$PATH"
 
 # Copy application code
-COPY cli.py config.py models.py pipeline.py workspace.py app.py ./
-COPY sources/ sources/
-COPY processors/ processors/
-COPY channels/ channels/
-COPY storage/ storage/
-COPY prompts/ prompts/
+COPY sift/ sift/
 COPY pages/ pages/
 COPY feeds.json .
 
@@ -38,5 +33,5 @@ COPY feeds.json .
 RUN mkdir -p /app/output /app/knowledge /app/workspaces
 
 # Default: run weekly digest
-ENTRYPOINT ["python3", "cli.py"]
+ENTRYPOINT ["python3", "sift/cli.py"]
 CMD ["run"]

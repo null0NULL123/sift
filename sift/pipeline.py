@@ -9,15 +9,15 @@ import logging
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timedelta, timezone
 
-from channels.base import BaseChannel
-from config import DEFAULT_DAYS, DEFAULT_LANGUAGE, FETCH_MAX_WORKERS, get_int
-from models import Digest, FeedResult, SourceConfig
-from processors.dedup import DedupProcessor
-from processors.summarizer import SummarizeProcessor
-from sources.base import BaseSource
-from sources.rss import RSSSource
-from sources.web import WebSource
-from storage.base import BaseStorage
+from sift.channels.base import BaseChannel
+from sift.config import DEFAULT_DAYS, DEFAULT_LANGUAGE, FETCH_MAX_WORKERS, get_int
+from sift.models import Digest, FeedResult, SourceConfig
+from sift.processors.dedup import DedupProcessor
+from sift.processors.summarizer import SummarizeProcessor
+from sift.sources.base import BaseSource
+from sift.sources.rss import RSSSource
+from sift.sources.web import WebSource
+from sift.storage.base import BaseStorage
 
 log = logging.getLogger("sift")
 

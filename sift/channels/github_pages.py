@@ -8,16 +8,16 @@ import logging
 from datetime import datetime
 from pathlib import Path
 
-from channels.base import BaseChannel
-from config import LOCALE, get_env
-from models import Digest
+from sift.channels.base import BaseChannel
+from sift.config import LOCALE, get_env
+from sift.models import Digest
 
 log = logging.getLogger("sift")
 
 
 def _docs_dir() -> Path:
     env_dir = os.environ.get("GITHUB_PAGES_DIR", "")
-    return Path(env_dir) if env_dir else Path(__file__).parent.parent / "site"
+    return Path(env_dir) if env_dir else Path(__file__).parent.parent.parent / "site"
 
 
 class GitHubPagesChannel(BaseChannel):
@@ -63,8 +63,8 @@ class GitHubPagesChannel(BaseChannel):
   </div>
   <div id="footer-include"></div>
   <script>
-    fetch('/partials/nav.html').then(r => r.text()).then(t => document.getElementById('nav-include').innerHTML = t);
-    fetch('/partials/footer.html').then(r => r.text()).then(t => document.getElementById('footer-include').innerHTML = t);
+    fetch(window.__sift_root + 'partials/nav.html').then(r => r.text()).then(t => { document.getElementById('nav-include').innerHTML = t; });
+    fetch(window.__sift_root + 'partials/footer.html').then(r => r.text()).then(t => document.getElementById('footer-include').innerHTML = t);
   </script>
 </body>
 </html>"""

@@ -9,8 +9,8 @@ from contextlib import contextmanager
 from datetime import datetime, timezone
 from pathlib import Path
 
-from models import Entry, FeedResult, SourceConfig
-from storage.knowledge import KnowledgeStorage
+from sift.models import Entry, FeedResult, SourceConfig
+from sift.storage.knowledge import KnowledgeStorage
 
 
 # ------------------------------------------------------------------

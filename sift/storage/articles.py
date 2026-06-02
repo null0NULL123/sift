@@ -8,14 +8,14 @@ import re
 import sqlite3
 from datetime import datetime, timedelta, timezone
 
-from config import (
+from sift.config import (
     CONTEXT_TITLE_TRUNCATE_LENGTH,
     MAX_KEYWORD_SEARCH,
     MAX_SEMANTIC_QUERIES,
     MIN_KEYWORD_LENGTH,
     get_int,
 )
-from models import ArticleRecord, Entry, FeedResult
+from sift.models import ArticleRecord, Entry, FeedResult
 
 from .base import BaseStorage
 
@@ -132,7 +132,7 @@ class ArticleStorage(BaseStorage):
 
     def cleanup_old_embeddings(self, months: int | None = None) -> int:
         """Remove embeddings older than N months. Articles are kept, only vectors are deleted."""
-        from config import EMBEDDING_RETENTION_MONTHS
+        from sift.config import EMBEDDING_RETENTION_MONTHS
 
         months = months or get_int("EMBEDDING_RETENTION_MONTHS", EMBEDDING_RETENTION_MONTHS)
         db = self._get_db()

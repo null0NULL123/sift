@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from datetime import timezone
 
-from sources.rss import RSSSource
-from sources.web import _DEFAULTS
+from sift.sources.rss import RSSSource
+from sift.sources.web import _DEFAULTS
 
 
 def test_rss_parse_date():

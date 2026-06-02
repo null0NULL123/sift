@@ -6,7 +6,7 @@ Uses SQLite + sqlite-vec for structured + vector queries in a single .db file.
 
 from __future__ import annotations
 
-from models import ArticleRecord, Digest, FeedResult
+from sift.models import ArticleRecord, Digest, FeedResult
 
 from .articles import ArticleStorage
 from .dashboard import DashboardStorage

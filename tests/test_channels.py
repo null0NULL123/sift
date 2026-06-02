@@ -6,10 +6,10 @@ import os
 from pathlib import Path
 
 from base import env_vars, temp_dir
-from channels.email import EmailChannel
-from channels.file import FileChannel
-from channels.github_pages import GitHubPagesChannel
-from models import Digest
+from sift.channels.email import EmailChannel
+from sift.channels.file import FileChannel
+from sift.channels.github_pages import GitHubPagesChannel
+from sift.models import Digest
 
 # Load .env file
 try:

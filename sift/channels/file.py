@@ -4,7 +4,7 @@ import logging
 import os
 from datetime import datetime
 
-from models import Digest
+from sift.models import Digest
 
 from .base import BaseChannel
 
@@ -15,7 +15,7 @@ class FileChannel(BaseChannel):
     """Save digest to a local markdown file."""
 
     def __init__(self, output_dir: str | None = None) -> None:
-        from config import get_env, DEFAULT_OUTPUT_DIR
+        from sift.config import get_env, DEFAULT_OUTPUT_DIR
         self.output_dir = output_dir or get_env("OUTPUT_DIR", DEFAULT_OUTPUT_DIR)
 
     @property

@@ -10,8 +10,8 @@ from urllib.parse import urljoin
 import httpx
 from bs4 import BeautifulSoup
 
-from config import HTTP_USER_AGENT, WEB_SUMMARY_TRUNCATE_LENGTH, get_int
-from models import FeedResult, Entry, SourceConfig
+from sift.config import HTTP_USER_AGENT, WEB_SUMMARY_TRUNCATE_LENGTH, get_int
+from sift.models import FeedResult, Entry, SourceConfig
 from .base import BaseSource
 
 log = logging.getLogger("sift")

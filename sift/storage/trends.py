@@ -9,7 +9,7 @@ import sqlite3
 from collections import Counter, defaultdict
 from datetime import datetime, timedelta, timezone
 
-from config import (
+from sift.config import (
     CONTEXT_SUMMARY_TRUNCATE_LENGTH,
     CONTEXT_TITLE_TRUNCATE_LENGTH,
     LOCALE,
@@ -20,7 +20,7 @@ from config import (
     RISING_TOPIC_MIN_COUNT,
     RISING_TOPIC_MULTIPLIER,
 )
-from models import ArticleRecord, FeedResult
+from sift.models import ArticleRecord, FeedResult
 
 from .base import BaseStorage
 

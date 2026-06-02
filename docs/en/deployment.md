@@ -84,7 +84,7 @@ pip install -r requirements.txt        # CLI only
 # pip install -r requirements-ui.txt   # CLI + Web UI (optional)
 cp .env.example .env
 vi .env          # Fill in your configuration
-python3 cli.py run
+python3 sift/cli.py run
 ```
 
 When you need Web UI, install `requirements-ui.txt`, then start:
@@ -106,7 +106,7 @@ One-click deployment under Termux environment:
 git clone <repo> sift && cd sift
 bash setup.sh
 vi .env
-.venv/bin/python3 cli.py run
+.venv/bin/python3 sift/cli.py run
 crond  # Start scheduled tasks
 ```
 
@@ -157,15 +157,15 @@ The core pipeline (data source → filtering → AI summary → delivery) is dom
 Implementation: Switch prompt templates via `--profile`, switch data sources via `--feeds`:
 
 ```bash
-python3 cli.py run --profile tech-weekly                    # Tech report (default sources)
-python3 cli.py run --profile finance-weekly --feeds finance.json  # Financial research report
-python3 cli.py run --profile papers-weekly --feeds papers.json    # Paper report
+python3 sift/cli.py run --profile tech-weekly                    # Tech report (default sources)
+python3 sift/cli.py run --profile finance-weekly --feeds finance.json  # Financial research report
+python3 sift/cli.py run --profile papers-weekly --feeds papers.json    # Paper report
 ```
 
 You can also set different sending times:
 
 ```
-0 8 * * 1   python3 cli.py run --profile tech-weekly
-0 9 * * 1   python3 cli.py run --profile finance-weekly --feeds finance.json
-0 8 * * 5   python3 cli.py run --profile papers-weekly --feeds papers.json
+0 8 * * 1   python3 sift/cli.py run --profile tech-weekly
+0 9 * * 1   python3 sift/cli.py run --profile finance-weekly --feeds finance.json
+0 8 * * 5   python3 sift/cli.py run --profile papers-weekly --feeds papers.json
 ```

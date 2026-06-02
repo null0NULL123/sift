@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 
-from models import Digest, FeedResult
+from sift.models import Digest, FeedResult
 
 
 class BaseProcessor(ABC):

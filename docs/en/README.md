@@ -38,7 +38,7 @@ git clone <repo> && cd sift
 pip install -r requirements.txt
 cp .env.example .env
 vi .env              # Fill in API_KEY and other configurations
-python3 cli.py run   # Generate your first weekly report
+python3 sift/cli.py run   # Generate your first weekly report
 ```
 
 Container deployment (Podman / Docker):

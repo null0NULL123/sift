@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 
-from models import Digest
+from sift.models import Digest
 
 
 class BaseChannel(ABC):

@@ -7,13 +7,13 @@ import sys
 from pathlib import Path
 
 # Ensure project root is on path
-sys.path.insert(0, str(Path(__file__).parent))
+sys.path.insert(0, str(Path(__file__).parent.parent))
 
 import streamlit as st
 
-from config import load_env
-from storage.knowledge import KnowledgeStorage
-import workspace as ws
+from sift.config import load_env
+from sift.storage.knowledge import KnowledgeStorage
+import sift.workspace as ws
 
 st.set_page_config(
     page_title="Sift",
@@ -101,7 +101,7 @@ def render_workspace_selector():
             with st.spinner("正在抓取并生成摘要..."):
                 try:
                     result = subprocess.run(
-                        [sys.executable, "cli.py", "run", "--workspace", current],
+                        [sys.executable, "sift/cli.py", "run", "--workspace", current],
                         capture_output=True, text=True, timeout=300,
                     )
                     if result.returncode == 0:

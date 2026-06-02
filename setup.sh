@@ -43,7 +43,7 @@ fi
 
 # Setup cron (Termux)
 echo "Setting up cron..."
-CRON_CMD="cd $(pwd) && .venv/bin/python3 cli.py run >> output/cron.log 2>&1"
+CRON_CMD="cd $(pwd) && .venv/bin/python3 sift/cli.py run >> output/cron.log 2>&1"
 
 if command -v crond &>/dev/null || command -v crontab &>/dev/null; then
     # Termux uses crond, needs to be started
@@ -52,7 +52,7 @@ if command -v crond &>/dev/null || command -v crontab &>/dev/null; then
     echo "Start cron daemon: crond"
 else
     echo "Cron not available. Install with: pkg install cron"
-    echo "Manual run: .venv/bin/python3 cli.py run"
+    echo "Manual run: .venv/bin/python3 sift/cli.py run"
 fi
 
 echo ""
@@ -60,7 +60,7 @@ echo "=== Setup complete ==="
 echo ""
 echo "Quick start:"
 echo "  1. Edit .env with your credentials"
-echo "  2. Run: .venv/bin/python3 cli.py run"
+echo "  2. Run: .venv/bin/python3 sift/cli.py run"
 echo ""
 echo "Auto mode (every Monday 8am):"
 echo "  crond  # start cron daemon"

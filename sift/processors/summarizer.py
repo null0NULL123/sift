@@ -8,7 +8,7 @@ from pathlib import Path
 
 from openai import OpenAI
 
-from config import (
+from sift.config import (
     DEFAULT_DAYS,
     DEFAULT_LANGUAGE,
     DEFAULT_LLM_MAX_TOKENS,
@@ -20,7 +20,7 @@ from config import (
     get_int,
     get_summary_days,
 )
-from models import Digest, FeedResult
+from sift.models import Digest, FeedResult
 
 from .base import BaseProcessor
 

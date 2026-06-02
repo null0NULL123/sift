@@ -9,8 +9,8 @@ from datetime import datetime
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-from config import LOCALE, get_int
-from models import Digest
+from sift.config import LOCALE, get_int
+from sift.models import Digest
 
 from .base import BaseChannel
 

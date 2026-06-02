@@ -38,7 +38,7 @@ git clone <repo> && cd sift
 pip install -r requirements.txt
 cp .env.example .env
 vi .env              # 填入 API_KEY 等配置
-python3 cli.py run   # 生成第一期周报
+python3 sift/cli.py run   # 生成第一期周报
 ```
 
 容器部署（Podman / Docker）：

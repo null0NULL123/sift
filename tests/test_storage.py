@@ -6,9 +6,9 @@ import os
 import tempfile
 
 from base import make_entry, make_feed, temp_db
-from config import LOCALE
-from models import Digest
-from storage.knowledge import KnowledgeStorage
+from sift.config import LOCALE
+from sift.models import Digest
+from sift.storage.knowledge import KnowledgeStorage
 
 
 # ------------------------------------------------------------------
@@ -117,7 +117,7 @@ def test_all_tags():
 
 
 def test_digest():
-    from models import Digest
+    from sift.models import Digest
     with temp_db() as ks:
         d = Digest(content="test digest", article_count=5)
         ks.save_digest(d)

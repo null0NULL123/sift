@@ -5,9 +5,9 @@ from __future__ import annotations
 from unittest.mock import MagicMock, patch
 
 from base import make_entry, make_feed, make_source, temp_db
-from config import DEFAULT_DAYS, DEFAULT_LANGUAGE
-from models import Digest, FeedResult
-from pipeline import Pipeline, create_source
+from sift.config import DEFAULT_DAYS, DEFAULT_LANGUAGE
+from sift.models import Digest, FeedResult
+from sift.pipeline import Pipeline, create_source
 
 
 # ------------------------------------------------------------------
@@ -92,7 +92,7 @@ def test_run_full_pipeline():
         channel.name = "test"
 
         p = _make_pipeline(storage, summarizer=summarizer, channels=[channel])
-        with patch("pipeline.create_source", return_value=source):
+        with patch("sift.pipeline.create_source", return_value=source):
             result = p.run()
 
         # Result
@@ -125,7 +125,7 @@ def test_run_multiple_sources():
         sources = [make_source("Source A", "http://a"), make_source("Source B", "http://b")]
         p = _make_pipeline(storage, sources=sources, summarizer=summarizer)
 
-        with patch("pipeline.create_source", side_effect=create_for_config):
+        with patch("sift.pipeline.create_source", side_effect=create_for_config):
             result = p.run()
 
         assert result is not None
@@ -141,7 +141,7 @@ def test_run_no_summarizer():
     with temp_db() as storage:
         source = _mock_source(make_feed([make_entry("Article X")]))
         p = _make_pipeline(storage, summarizer=None)
-        with patch("pipeline.create_source", return_value=source):
+        with patch("sift.pipeline.create_source", return_value=source):
             result = p.run()
 
         assert result is None
@@ -154,7 +154,7 @@ def test_run_summarizer_returns_none():
         source = _mock_source(FeedResult(config=make_source(), entries=[]))
         summarizer = _mock_summarizer(returns_none=True)
         p = _make_pipeline(storage, summarizer=summarizer)
-        with patch("pipeline.create_source", return_value=source):
+        with patch("sift.pipeline.create_source", return_value=source):
             result = p.run()
 
         assert result is None
@@ -175,7 +175,7 @@ def test_run_channel_failure_continues():
 
         summarizer = _mock_summarizer()
         p = _make_pipeline(storage, summarizer=summarizer, channels=[failing, success])
-        with patch("pipeline.create_source", return_value=source):
+        with patch("sift.pipeline.create_source", return_value=source):
             result = p.run()
 
         assert result is not None
@@ -202,7 +202,7 @@ def test_run_injects_trend_context():
 
         summarizer = _mock_summarizer()
         p = _make_pipeline(storage, summarizer=summarizer)
-        with patch("pipeline.create_source", return_value=source):
+        with patch("sift.pipeline.create_source", return_value=source):
             p.run()
 
         # Verify context was passed
@@ -220,7 +220,7 @@ def test_fetch_only():
     with temp_db() as storage:
         source = _mock_source(make_feed([make_entry("Fetch Article")]))
         p = _make_pipeline(storage, summarizer=None)
-        with patch("pipeline.create_source", return_value=source):
+        with patch("sift.pipeline.create_source", return_value=source):
             results = p.fetch_only()
 
         assert len(results) == 1
@@ -234,7 +234,7 @@ def test_fetch_only_dedup():
         feed = make_feed([make_entry("Dedup Test")])
         source = _mock_source(feed, feed)
         p = _make_pipeline(storage, summarizer=None)
-        with patch("pipeline.create_source", return_value=source):
+        with patch("sift.pipeline.create_source", return_value=source):
             p.fetch_only()
             p.fetch_only()
 
@@ -261,7 +261,7 @@ def test_disabled_source_skipped():
             return source
 
         p = _make_pipeline(storage, sources=sources, summarizer=None)
-        with patch("pipeline.create_source", side_effect=counting_create):
+        with patch("sift.pipeline.create_source", side_effect=counting_create):
             p.fetch_only()
 
         assert call_count == 1

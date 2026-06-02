@@ -29,7 +29,7 @@ def get_workspace_root() -> Path:
     path = Path(root)
     if not path.is_absolute():
         # Make relative to project root (where workspace.py lives)
-        path = Path(__file__).parent / path
+        path = Path(__file__).parent.parent / path
     return path
 
 
@@ -48,7 +48,7 @@ def get_workspace_path(name: str) -> Path:
     """Get the path to a workspace directory."""
     if name == DEFAULT_WORKSPACE:
         # Default workspace uses project root (backward compatible)
-        return Path(__file__).parent
+        return Path(__file__).parent.parent
     return get_workspace_root() / name
 
 
